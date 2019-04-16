@@ -1,11 +1,18 @@
 # -*- coding:utf-8 -*-
 import tkinter as tk
+from tkinter import filedialog
+
 from PIL import Image,ImageTk
 import time
 import datetime
+
+from pyzbar import pyzbar
+
 from qr import getimage
 
-wj = r'C:\Users\dan\Desktop\code'
+wj = r'C:/Users/dan/Desktop/code'
+nowfile = wj
+
 level = 'L'
 root = tk.Tk()
 res = tk.StringVar()
@@ -41,8 +48,24 @@ def func():
     level = res.get()
     print(res.get())
 
+def distinguish():
+    global nowfile
+
+    # img = ImageEnhance.Brightness(img).enhance(2.0)#增加亮度
+    # img = ImageEnhance.Sharpness(img).enhance(17.0)#锐利化
+    # img = ImageEnhance.Contrast(img).enhance(4.0)#增加对比度
+    # img = img.convert('L')#灰度化
+
+    img = Image.open(nowfile)
+    barcodes = pyzbar.decode(img)
+    for barcode in barcodes:
+        barcodeData = barcode.data.decode("utf-8")
+        print("识别：")
+        print(barcodeData)
+
 def go():
     global wj
+    global nowfile
     t = time.time()
     print('go')
 
@@ -53,8 +76,10 @@ def go():
     getimage(r'www.baidu.com',level,name,wj)
 
 
-    wj += '\\'
+    wj += '/'
     urlname = wj + name
+
+    nowfile = urlname
 
     image(root,urlname)
 
@@ -115,6 +140,31 @@ def radio(root):
                              )
     button1.place(x=185,y=165)
 
+    button2 = tk.Button(root,
+                        text="识别",
+                        width=5,
+                        height=1,
+                        command=distinguish
+                        )
+    button2.place(x=600, y=450)
+
+    button3 = tk.Button(root,
+                        text="选择",
+                        width=5,
+                        height=1,
+                        command=choosewj
+                        )
+    button3.place(x=550, y=450)
+
+
+def choosewj():
+    global nowfile
+    file_path = filedialog.askopenfilename()
+
+    nowfile = file_path
+    print("choose:")
+    print(file_path)
+    image(root,file_path)
 
 main()
 

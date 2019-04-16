@@ -39,8 +39,8 @@ def tt():
             contrast=1.0,
             brightness=1.0,
             level = 'L', #L，M，Q，H
-            save_name='123.png',
-            save_dir=r'C:\Users\dan\Desktop\code'
+            save_name='test.png',
+            save_dir=r'C:/Users/dan/Desktop/code'
             )
 
 tt()
